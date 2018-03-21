@@ -62,13 +62,13 @@ export default class Login extends Component {
       if (res.code === 0) {
         Storage.set('user', { ...this.state })
 
-        const { uid, token, timestamp } = res.data
+        const { uid, token, timestamp } = res.data.key
         setToken({ uid, token, timestamp })
 
-        store.dispatch(fetchProfileSuccess(res.data))
+        store.dispatch(fetchProfileSuccess(res.data.user))
         store.dispatch(initApp())
 
-        Actions[SCENE_HOME]({ user: res.data })
+        Actions.reset(SCENE_HOME, { user: res.data.user })
       }
     })
   }

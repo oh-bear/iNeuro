@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   View
 } from 'react-native'
+
 import RNSplashScreen from 'react-native-splash-screen'
 import { Actions } from 'react-native-router-flux'
 import { SCENE_HOME, SCENE_LOGIN } from './constants/scene'
@@ -14,6 +15,8 @@ import initApp from './redux/modules/init'
 import { isDev } from './common/util'
 import { USERS } from './network/Urls'
 import HttpUtils from './network/HttpUtils'
+import store from './redux/store'
+import { fetchProfileSuccess } from './redux/modules/user'
 
 const URL = USERS.login
 
@@ -27,9 +30,10 @@ function mapStateToProps(state) {
 class SplashScreen extends Component {
 
   async componentDidMount() {
+    // await Storage.remove('user')
     const user = await Storage.get('user', {})
     if (!user.account || !user.password) {
-      Actions[SCENE_LOGIN]()
+      Actions.reset(SCENE_LOGIN)
       RNSplashScreen.hide()
       return
     }
@@ -53,14 +57,25 @@ class SplashScreen extends Component {
     try {
       HttpUtils.post(URL, { account: user.account, password: user.password }).then(
         res => {
-          Actions[SCENE_HOME]()
+          if (res.code === 0) {
+            const { uid, token, timestamp } = res.data.key
+            setToken({ uid, token, timestamp })
+
+            store.dispatch(fetchProfileSuccess(res.data.user))
+            store.dispatch(initApp())
+
+            Actions.reset(SCENE_HOME, { user: res.data.user })
+          } else {
+            Toast.fail('自动登录失败', 1.5)
+            Actions.reset(SCENE_LOGIN)
+          }
         }
       )
 
     } catch (e) {
       console.log(e)
       Toast.fail('自动登录失败', 1.5)
-      Actions[SCENE_LOGIN]()
+      Actions.reset(SCENE_LOGIN)
     }
 
     RNSplashScreen.hide()

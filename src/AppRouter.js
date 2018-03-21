@@ -34,7 +34,7 @@ export default class AppRouter extends Component {
               key={scenes.SCENE_HOME}
               component={Home}
               title="首页"
-              type={ActionConst.REPLACE}
+              type={ActionConst.RESET}
               hideNavBar
               duration={0}
             />
