@@ -1,16 +1,65 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   View,
   StyleSheet,
-  Text
+  Text,
+  ListView,
+  Image,
+  TouchableOpacity
 } from 'react-native'
-import { HEIGHT, getResponsiveHeight } from '../common/styles'
+import { HEIGHT, WIDTH, getResponsiveWidth, getResponsiveHeight } from '../common/styles'
+import { Actions } from 'react-native-router-flux'
+import { SCENE_DETAIL } from '../constants/scene'
+
+import { LIBS } from '../network/Urls'
+import HttpUtils from '../network/HttpUtils'
+import CommonNav from '../components/CommonNav'
 
 export default class Structure extends Component {
+
+  state = {
+    dataSource: new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    }),
+    loaded: false
+  }
+
+  componentDidMount() {
+    HttpUtils.get(LIBS.list, { system_name: this.props.system_name }).then(
+      res => {
+        this.setState({
+          dataSource: this.state.dataSource.cloneWithRows(res.data),
+          loaded: true
+        })
+      }
+    )
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text>Structure</Text>
+        <CommonNav title='STRUCTURE'/>
+        <ListView
+          style={styles.list}
+          dataSource={this.state.dataSource}
+          renderRow={
+            (rowData) =>
+              <TouchableOpacity
+                style={styles.box}
+                onPress={() => {
+                  Actions.jump(SCENE_DETAIL, {data: rowData})
+                }}
+              >
+                <View style={styles.content}>
+                  <Text style={styles.text}>{rowData.name}</Text>
+                  <Image
+                    style={styles.icon}
+                    source={require('../../res/images/icon/icon_search.png')}/>
+                </View>
+                <View style={styles.line}/>
+              </TouchableOpacity>
+          }
+        />
       </View>
     )
   }
@@ -19,8 +68,40 @@ export default class Structure extends Component {
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
-    backgroundColor: 'rgb(242,246,250)',
+    backgroundColor: 'white',
     alignItems: 'center',
     height: HEIGHT
+  },
+  list: {
+    marginTop: getResponsiveHeight(13)
+  },
+  box: {
+    width: WIDTH,
+    height: getResponsiveHeight(50)
+  },
+  content: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: WIDTH,
+    height: getResponsiveHeight(50)
+  },
+  line: {
+    width: 0.8 * WIDTH,
+    marginLeft: getResponsiveWidth(50),
+    height: 1,
+    borderBottomColor: '#979797',
+    borderBottomWidth: 1
+  },
+  text: {
+    color: '#444',
+    marginTop: getResponsiveHeight(15),
+    marginLeft: getResponsiveWidth(63),
+    fontSize: 16
+  },
+  icon: {
+    marginTop: getResponsiveHeight(16),
+    marginRight: getResponsiveHeight(18),
+    width: 20,
+    height: 20,
   }
 })

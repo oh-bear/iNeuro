@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import Login from './containers/Login'
 import Home from './containers/Home'
 import Profile from './containers/Profile'
@@ -7,11 +7,12 @@ import Review from './containers/Review'
 import Library from './containers/Library'
 import Search from './containers/Search'
 import Structure from './containers/Structure'
+import Detail from './containers/Detail'
 
-import {Scene, Router, ActionConst} from 'react-native-router-flux'
+import { Scene, Router, ActionConst } from 'react-native-router-flux'
 import * as scenes from './constants/scene'
 import SplashScreen from './SplashScreen'
-import {Provider} from 'react-redux'
+import { Provider } from 'react-redux'
 import store from './redux/store'
 
 export default class AppRouter extends Component {
@@ -81,6 +82,13 @@ export default class AppRouter extends Component {
             <Scene
               key={scenes.SCENE_STRUCTURE}
               component={Structure}
+              type={ActionConst.REPLACE}
+              hideNavBar
+              duration={0}
+            />
+            <Scene
+              key={scenes.SCENE_DETAIL}
+              component={Detail}
               type={ActionConst.REPLACE}
               hideNavBar
               duration={0}

@@ -43,7 +43,6 @@ export default class CommonNav extends Component {
 const styles = StyleSheet.create({
   navBarStyle: {
     width: WIDTH,
-    height: 116
   },
   navLeftImg: {
     width: 25,
@@ -51,7 +50,6 @@ const styles = StyleSheet.create({
     marginRight: 16
   },
   titleStyle: {
-    marginLeft: -80,
-    top: 35
+    marginLeft: 72
   }
 })

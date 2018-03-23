@@ -5,4 +5,5 @@ export const USERS = {
 
 export const LIBS = {
   list: '/libs/resource_list',
+  search: '/libs/search',
 }

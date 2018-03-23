@@ -43,24 +43,24 @@ export default class Navigator extends Component {
         {this.props.title}
       </TextPingFang>
     let content = (
-      <View style={[styles.navBar, this.props.navBarStyle]}>
-        <TouchableOpacity
-          style={[styles.navBarLeftImgContainer, this.props.navLeftStyle]}
-          onPress={this.props.leftBtnImgOnPress}
-        >
-          {this.props.leftBtnImg ? this.props.leftBtnImg : (<View style={styles.navBarBtnFade}/>)}
-        </TouchableOpacity>
-
+      <View>
+        <View style={[styles.navBar, this.props.navBarStyle]}>
+          <TouchableOpacity
+            style={[styles.navBarLeftImgContainer, this.props.navLeftStyle]}
+            onPress={this.props.leftBtnImgOnPress}
+          >
+            {this.props.leftBtnImg ? this.props.leftBtnImg : (<View style={styles.navBarBtnFade}/>)}
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.navBarRightImgContainer, this.props.navRightStyle]}
+            onPress={this.props.rightBtnImgOnPress}
+          >
+            {this.props.rightBtnImg ? this.props.rightBtnImg : (<View style={styles.navBarBtnFade}/>)}
+          </TouchableOpacity>
+        </View>
         <View style={[styles.titleViewContainer, this.props.titleStyle]}>
           {titleView}
         </View>
-
-        <TouchableOpacity
-          style={[styles.navBarRightImgContainer, this.props.navRightStyle]}
-          onPress={this.props.rightBtnImgOnPress}
-        >
-          {this.props.rightBtnImg ? this.props.rightBtnImg : (<View style={styles.navBarBtnFade}/>)}
-        </TouchableOpacity>
       </View>
     )
     return (
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   },
   navBar: {
     alignItems: 'center',
-    height: NAVBAR_HEIGHT,
+    marginTop: 39,
     backgroundColor: '#fff',
     flexDirection: 'row',
     width: WIDTH,
@@ -99,6 +99,10 @@ const styles = StyleSheet.create({
   },
   navBarBtnFade: {
     width: getResponsiveWidth(22)
+  },
+  titleViewContainer: {
+    flexDirection: 'column',
+    justifyContent: 'flex-start'
   },
   title: {
     fontSize: 34,

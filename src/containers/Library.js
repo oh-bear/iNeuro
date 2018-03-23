@@ -7,27 +7,29 @@ import {
   Image,
   TouchableOpacity
 } from 'react-native'
-import { HEIGHT, WIDHT, getResponsiveHeight, getResponsiveWidth } from '../common/styles'
+import { HEIGHT, WIDTH, getResponsiveHeight, getResponsiveWidth } from '../common/styles'
 import CommonNav from '../components/CommonNav'
 import { SCENE_STRUCTURE } from '../constants/scene'
 import { Actions } from 'react-native-router-flux'
 
 export default class Library extends Component {
 
-  state = { dataSource: {} }
+  state = {
+    dataSource: new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    })
+  }
 
   componentWillMount() {
-    let ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
     this.setState({
-      dataSource: ds.cloneWithRows(['Skull', 'Orbit', 'Cavernous sinus', 'Sellar region', 'Temporal bone', 'Posterior cranial fossa', 'Endoscopic view of skull base', 'Ventricle', 'White matter', 'Neck'])
+      dataSource: this.state.dataSource.cloneWithRows(['Skull', 'Orbit', 'Cavernous sinus', 'Sellar region', 'Temporal bone', 'Posterior cranial fossa', 'Endoscopic view of skull base', 'Ventricle', 'White matter', 'Neck'])
     })
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <CommonNav
-          title="LIBRARY"/>
+        <CommonNav title='LIBRARY'/>
         <ListView
           style={styles.list}
           dataSource={this.state.dataSource}
@@ -36,7 +38,7 @@ export default class Library extends Component {
               <TouchableOpacity
                 style={styles.box}
                 onPress={() => {
-                  Actions.jump(SCENE_STRUCTURE)
+                  Actions.jump(SCENE_STRUCTURE, { system_name: rowData })
                 }}
               >
                 <View style={styles.content}>
@@ -64,17 +66,17 @@ const styles = StyleSheet.create({
     marginTop: getResponsiveHeight(13)
   },
   box: {
-    width: WIDHT,
+    width: WIDTH,
     height: getResponsiveHeight(50)
   },
   content: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    width: WIDHT,
+    width: WIDTH,
     height: getResponsiveHeight(50)
   },
   line: {
-    width: 0.8 * WIDHT,
+    width: 0.8 * WIDTH,
     marginLeft: getResponsiveWidth(50),
     height: 1,
     borderBottomColor: '#979797',
