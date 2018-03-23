@@ -119,14 +119,14 @@ const styles = StyleSheet.create({
   },
   btn_bar: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: getResponsiveHeight(92),
     width: WIDTH
   },
   left_btn: {
-    flex: 1,
+    marginLeft: 0
   },
   right_btn: {
-    flex: 1,
-    marginRight: getResponsiveWidth(-74)
+    marginRight: 0
   }
 })

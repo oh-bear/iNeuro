@@ -6,6 +6,7 @@ import Learn from './containers/Learn'
 import Review from './containers/Review'
 import Library from './containers/Library'
 import Search from './containers/Search'
+import Structure from './containers/Structure'
 
 import {Scene, Router, ActionConst} from 'react-native-router-flux'
 import * as scenes from './constants/scene'
@@ -38,7 +39,6 @@ export default class AppRouter extends Component {
             <Scene
               key={scenes.SCENE_HOME}
               component={Home}
-              title="首页"
               type={ActionConst.RESET}
               hideNavBar
               duration={0}
@@ -46,7 +46,6 @@ export default class AppRouter extends Component {
             <Scene
               key={scenes.SCENE_PROFILE}
               component={Profile}
-              title="首页"
               type={ActionConst.REPLACE}
               hideNavBar
               duration={0}
@@ -54,7 +53,6 @@ export default class AppRouter extends Component {
             <Scene
               key={scenes.SCENE_LEARN}
               component={Learn}
-              title="首页"
               type={ActionConst.REPLACE}
               hideNavBar
               duration={0}
@@ -62,7 +60,6 @@ export default class AppRouter extends Component {
             <Scene
               key={scenes.SCENE_REVIEW}
               component={Review}
-              title="首页"
               type={ActionConst.REPLACE}
               hideNavBar
               duration={0}
@@ -70,7 +67,6 @@ export default class AppRouter extends Component {
             <Scene
               key={scenes.SCENE_SEARCH}
               component={Search}
-              title="首页"
               type={ActionConst.REPLACE}
               hideNavBar
               duration={0}
@@ -78,7 +74,13 @@ export default class AppRouter extends Component {
             <Scene
               key={scenes.SCENE_LIBRARY}
               component={Library}
-              title="首页"
+              type={ActionConst.REPLACE}
+              hideNavBar
+              duration={0}
+            />
+            <Scene
+              key={scenes.SCENE_STRUCTURE}
+              component={Structure}
               type={ActionConst.REPLACE}
               hideNavBar
               duration={0}
