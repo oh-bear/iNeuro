@@ -3,14 +3,8 @@ import {
   View,
   StatusBar,
   StyleSheet,
-  Text,
-  Navigator,
-  TouchableOpacity,
-  Image,
   ImageBackground,
-  ScrollView,
   TextInput,
-  AsyncStorage
 } from 'react-native'
 import TextPingFang from '../components/TextPingFang'
 import {
@@ -34,9 +28,6 @@ import initApp from '../redux/modules/init'
 import SegmentedControl from '../components/SegmentedControl'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
-const URL = USERS.login
-const URLREGISTER = USERS.register
-
 export default class Login extends Component {
 
   state = { account: '', password: '', name: '', confirmPwd: '', selectedIndex: 1 }
@@ -57,15 +48,14 @@ export default class Login extends Component {
   }
 
   onItemSelected(index) {
-    this.setState({
-        selectedIndex: index
-    });
+    this.setState({ selectedIndex: index })
   }
 
   onSubmit = async () => {
 
     const { account, password } = this.state
-    var reg = /^((1[3-8][0-9])+\d{8})$/
+    const reg = /^((1[3-8][0-9])+\d{8})$/
+
     if (!reg.test(account)) {
       Toast.fail('请填写正确的手机号')
       return
@@ -78,7 +68,7 @@ export default class Login extends Component {
 
     Toast.loading('登录中', 0, null, false)
 
-    HttpUtils.post(URL, {
+    HttpUtils.post(USERS.login, {
       account,
       password
     }).then(res => {
@@ -102,7 +92,7 @@ export default class Login extends Component {
   onSubmitRegister = async () => {
 
     const { account, password, name, confirmPwd } = this.state
-    var reg = /^((1[3-8][0-9])+\d{8})$/
+    const reg = /^((1[3-8][0-9])+\d{8})$/
     if (!reg.test(account)) {
       Toast.fail('请填写正确的手机号')
       return
@@ -113,14 +103,14 @@ export default class Login extends Component {
       return
     }
 
-    if (password != confirmPwd) {
+    if (password !== confirmPwd) {
       Toast.fail('两次密码输入不一致')
       return
     }
 
     Toast.loading('注册中', 0, null, false)
 
-    HttpUtils.post(URLREGISTER, {
+    HttpUtils.post(URL.register, {
       account,
       password,
       name
@@ -129,7 +119,7 @@ export default class Login extends Component {
       if (res.code === 0) {
         Storage.set('user', { ...this.state })
 
-        // 注册成功后 登录
+        // 注册成功后直接登录
         HttpUtils.post(URL, {
           account,
           password
@@ -158,35 +148,41 @@ export default class Login extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar  
-         animated={true}
-         hidden={false}
-         backgroundColor={'green'}  
-         translucent={true}  
-         barStyle={'light-content'}
-        >  
-        </StatusBar>  
-        <ImageBackground style={styles.bg} source={this.state.selectedIndex == 1 ? require('../../res/images/bg_sign.png') : require('../../res/images/bg_reg.png')}>
-          <KeyboardAwareScrollView 
-            style={styles.scview} 
-            extraScrollHeight={40} 
+        <StatusBar
+          animated={true}
+          hidden={false}
+          backgroundColor={'green'}
+          translucent={true}
+          barStyle={'light-content'}
+        >
+        </StatusBar>
+        <ImageBackground
+          style={styles.bg}
+          source={
+            this.state.selectedIndex === 1
+              ? require('../../res/images/bg_sign.png')
+              : require('../../res/images/bg_reg.png')}>
+          <KeyboardAwareScrollView
+            style={styles.scview}
+            extraScrollHeight={40}
             scrollEnabled={false}
             resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={{ alignItems: "center" }}
+            contentContainerStyle={{ alignItems: 'center' }}
           >
-          <View style={[styles.card, {
-            marginTop: this.state.selectedIndex == 1 ? getResponsiveHeight(180) : getResponsiveHeight(150),
-          }]}>
-            <SegmentedControl style={styles.segcontrol}
-                              defaultPage={1}
-                              itemButtonViewStyle = {styles.itemButtonViewStyle}
-                              itemHeaderViewStyle = {styles.itemHeaderViewStyle}
-                              onItemSelected = {this.onItemSelected.bind(this)}
-                              ref = {e=>this.SegmentedControl=e}
-            >
-              <SegmentedControl.Item
-                  title = {'SIGN UP'}
+            <View
+              style={
+                [styles.card, { marginTop: this.state.selectedIndex === 1 ? getResponsiveHeight(180) : getResponsiveHeight(150), }]}>
+              <SegmentedControl
+                style={styles.segcontrol}
+                defaultPage={1}
+                itemButtonViewStyle={styles.itemButtonViewStyle}
+                itemHeaderViewStyle={styles.itemHeaderViewStyle}
+                onItemSelected={this.onItemSelected.bind(this)}
+                ref={e => this.SegmentedControl = e}
               >
+                <SegmentedControl.Item
+                  title={'SIGN UP'}
+                >
                   <View style={styles.input_container}>
                     <TextInput
                       placeholder={'手机号码'}
@@ -221,12 +217,17 @@ export default class Login extends Component {
                       }}
                       password={true}
                       secureTextEntry/>
-                    <Button type="primary" style={styles.btn} onClick={this.onSubmitRegister}>注册</Button>
+                    <Button
+                      type="primary"
+                      style={styles.btn}
+                      onClick={this.onSubmitRegister}>
+                      注册
+                    </Button>
                   </View>
-              </SegmentedControl.Item>
-              <SegmentedControl.Item
-                  title = {'SIGN IN'}
-              >
+                </SegmentedControl.Item>
+                <SegmentedControl.Item
+                  title={'SIGN IN'}
+                >
                   <View style={styles.input_container}>
                     <TextInput
                       placeholder={'手机号码'}
@@ -246,11 +247,16 @@ export default class Login extends Component {
                       defaultValue={this.state.password}
                       password={true}
                       secureTextEntry/>
-                    <Button type="primary" style={styles.btn} onClick={this.onSubmit}>登录</Button>
+                    <Button
+                      type="primary"
+                      style={styles.btn}
+                      onClick={this.onSubmit}>
+                      登录
+                    </Button>
                   </View>
-              </SegmentedControl.Item>
-            </SegmentedControl>
-          </View>
+                </SegmentedControl.Item>
+              </SegmentedControl>
+            </View>
           </KeyboardAwareScrollView>
         </ImageBackground>
         <TextPingFang style={styles.license}>确认登录代表您已经默认同意相关协议条款</TextPingFang>
@@ -279,9 +285,7 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%'
   },
-  itemButtonViewStyle: {
-    
-  },
+  itemButtonViewStyle: {},
   itemHeaderViewStyle: {
     height: 50,
     paddingVertical: 10,
