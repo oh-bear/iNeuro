@@ -54,19 +54,19 @@ export default class Login extends Component {
   onSubmit = async () => {
 
     const { account, password } = this.state
-    const reg = /^((1[3-8][0-9])+\d{8})$/
-
-    if (!reg.test(account)) {
-      Toast.fail('请填写正确的手机号')
-      return
-    }
+    // const reg = /^((1[3-8][0-9])+\d{8})$/
+    //
+    // if (!reg.test(account)) {
+    //   Toast.fail('请填写正确的手机号')
+    //   return
+    // }
 
     if (password.length < 6) {
-      Toast.fail('密码格式错误')
+      Toast.fail('Your password is too short!')
       return
     }
 
-    Toast.loading('登录中', 0, null, false)
+    Toast.loading('Login...', 0, null, false)
 
     HttpUtils.post(USERS.login, {
       account,
@@ -92,23 +92,23 @@ export default class Login extends Component {
   onSubmitRegister = async () => {
 
     const { account, password, name, confirmPwd } = this.state
-    const reg = /^((1[3-8][0-9])+\d{8})$/
-    if (!reg.test(account)) {
-      Toast.fail('请填写正确的手机号')
-      return
-    }
+    // const reg = /^((1[3-8][0-9])+\d{8})$/
+    // if (!reg.test(account)) {
+    //   Toast.fail('请填写正确的手机号')
+    //   return
+    // }
 
     if (password.length < 6) {
-      Toast.fail('密码格式错误')
+      Toast.fail('Your password is too short!')
       return
     }
 
     if (password !== confirmPwd) {
-      Toast.fail('两次密码输入不一致')
+      Toast.fail('Your passwords is not the same.')
       return
     }
 
-    Toast.loading('注册中', 0, null, false)
+    Toast.loading('Register...', 0, null, false)
 
     HttpUtils.post(URL.register, {
       account,
@@ -185,7 +185,7 @@ export default class Login extends Component {
                 >
                   <View style={styles.input_container}>
                     <TextInput
-                      placeholder={'手机号码'}
+                      placeholder={'E-Mail'}
                       placeholderTextColor={'rgba(0,0,0,0.52)'}
                       style={styles.text_input}
                       onChangeText={text => {
@@ -193,14 +193,14 @@ export default class Login extends Component {
                       }}
                       defaultValue={this.state.account}/>
                     <TextInput
-                      placeholder={'用户名'}
+                      placeholder={'Name'}
                       placeholderTextColor={'rgba(0,0,0,0.52)'}
                       style={styles.text_input}
                       onChangeText={text => {
                         this.setState({ name: text })
                       }}/>
                     <TextInput
-                      placeholder={'您的密码'}
+                      placeholder={'Password'}
                       placeholderTextColor={'rgba(0,0,0,0.52)'}
                       style={styles.text_input}
                       onChangeText={text => {
@@ -209,7 +209,7 @@ export default class Login extends Component {
                       password={true}
                       secureTextEntry/>
                     <TextInput
-                      placeholder={'确认密码'}
+                      placeholder={'Password'}
                       placeholderTextColor={'rgba(0,0,0,0.52)'}
                       style={styles.text_input}
                       onChangeText={text => {
@@ -230,7 +230,7 @@ export default class Login extends Component {
                 >
                   <View style={styles.input_container}>
                     <TextInput
-                      placeholder={'手机号码'}
+                      placeholder={'E-Mail'}
                       placeholderTextColor={'rgba(0,0,0,0.52)'}
                       style={styles.text_input}
                       onChangeText={text => {
@@ -238,7 +238,7 @@ export default class Login extends Component {
                       }}
                       defaultValue={this.state.account}/>
                     <TextInput
-                      placeholder={'您的密码'}
+                      placeholder={'Password'}
                       placeholderTextColor={'rgba(0,0,0,0.52)'}
                       style={styles.text_input}
                       onChangeText={text => {

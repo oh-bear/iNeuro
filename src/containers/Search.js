@@ -10,6 +10,8 @@ import {
 } from 'react-native'
 import { WIDTH, HEIGHT, getResponsiveWidth, getResponsiveHeight } from '../common/styles'
 import CommonNav from '../components/CommonNav'
+import { SCENE_DETAIL } from '../constants/scene'
+import { Actions } from 'react-native-router-flux'
 
 import { LIBS } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
@@ -62,6 +64,9 @@ export default class Search extends Component {
             (rowData) =>
               <TouchableOpacity
                 style={styles.box}
+                onPress={() => {
+                  Actions.jump(SCENE_DETAIL, { data: rowData })
+                }}
               >
                 <View style={styles.content}>
                   <Text style={styles.text}>{rowData.name}</Text>
