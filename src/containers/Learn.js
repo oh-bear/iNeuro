@@ -162,7 +162,10 @@ export default class Learn extends Component {
           style={styles.result}
           onPress={this.next}
         >
-          <Image source={require('../../res/images/learn/right.png')}/>
+          <Text>{this.state.data.name}</Text>
+          <Image
+            style={styles.result_logo}
+            source={require('../../res/images/learn/right.png')}/>
         </TouchableOpacity>
       break
     case 2:
@@ -171,7 +174,10 @@ export default class Learn extends Component {
           style={styles.result}
           onPress={this.next}
         >
-          <Image source={require('../../res/images/learn/wrong.png')}/>
+          <Text>{this.state.data.name}</Text>
+          <Image
+            style={styles.result_logo}
+            source={require('../../res/images/learn/wrong.png')}/>
         </TouchableOpacity>
       break
     default:
@@ -245,5 +251,8 @@ const styles = StyleSheet.create({
   },
   result: {
     marginTop: 50
+  },
+  result_logo: {
+    marginTop: 10
   }
 })

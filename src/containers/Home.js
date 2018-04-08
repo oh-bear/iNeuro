@@ -5,12 +5,15 @@ import {
   Text,
   ImageBackground,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  AlertIOS
 } from 'react-native'
 import { HEIGHT, WIDTH, getResponsiveWidth, getResponsiveHeight } from '../common/styles'
 import { connect } from 'react-redux'
 import * as scenes from '../constants/scene'
 import { Actions } from 'react-native-router-flux'
+import { LEARN } from '../network/Urls'
+import HttpUtils from '../network/HttpUtils'
 
 function mapStateToProps(state) {
   return {
@@ -28,9 +31,11 @@ export default class Home extends Component {
           <TouchableOpacity
             style={styles.face}
             onPress={() => {
-              Actions.jump(scenes.SCENE_PROFILE)
+              // Actions.jump(scenes.SCENE_PROFILE)
             }}>
-            <Image style={styles.face_img} source={{ uri: this.props.user.face }}/>
+            <Image
+              style={styles.face_img}
+              source={{ uri: this.props.user.face }}/>
           </TouchableOpacity>
           <Text style={styles.name}>{this.props.user.name}</Text>
         </View>
@@ -44,7 +49,13 @@ export default class Home extends Component {
           </ImageBackground>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {
-          Actions.jump(scenes.SCENE_REVIEW)
+          HttpUtils.post(LEARN.get_review, {}).then(res => {
+            if (res.code === 406) {
+              AlertIOS.alert('Good', 'There is nothing to review. Go to learn!')
+            } else {
+              Actions.jump(scenes.SCENE_REVIEW)
+            }
+          })
         }}>
           <ImageBackground
             source={require('../../res/images/home/board.png')}
