@@ -110,7 +110,7 @@ export default class Login extends Component {
 
     Toast.loading('Register...', 0, null, false)
 
-    HttpUtils.post(URL.register, {
+    HttpUtils.post(USERS.register, {
       account,
       password,
       name
@@ -120,7 +120,7 @@ export default class Login extends Component {
         Storage.set('user', { ...this.state })
 
         // 注册成功后直接登录
-        HttpUtils.post(URL, {
+        HttpUtils.post(USERS.login, {
           account,
           password
         }).then(res => {
