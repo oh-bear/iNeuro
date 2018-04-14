@@ -4,7 +4,8 @@ import {
   StyleSheet,
   Text,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  ScrollView
 } from 'react-native'
 import { WIDTH, HEIGHT, getResponsiveHeight } from '../common/styles'
 import CommonNav from '../components/CommonNav'
@@ -213,15 +214,15 @@ export default class Learn extends Component {
             <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
           }
           rightBtnImgOnPress={this.next}/>
-        <View style={styles.box}>
+        <ScrollView style={styles.box}>
           <Image
             style={{
               width: WIDTH,
               height: this.state.height
             }}
             source={{ uri: this.state.data.url }}/>
-        </View>
-        {optionsView}
+          {optionsView}
+        </ScrollView>
       </View>
     )
   }
@@ -250,6 +251,8 @@ const styles = StyleSheet.create({
     borderColor: '#979797'
   },
   result: {
+    flexDirection: 'column',
+    alignItems: 'center',
     marginTop: 50
   },
   result_logo: {
