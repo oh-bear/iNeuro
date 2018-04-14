@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import {
+  Text,
   View,
   StatusBar,
   StyleSheet,
-  ImageBackground,
+  Image,
   TextInput,
 } from 'react-native'
 import TextPingFang from '../components/TextPingFang'
@@ -16,6 +17,7 @@ import {
 import { Button, Toast } from 'antd-mobile'
 import Storage from '../common/storage'
 import loading from '../common/loading'
+import { setSpText } from '../common/ScreenUtil'
 import { SCENE_HOME } from '../constants/scene'
 import { Actions } from 'react-native-router-flux'
 import { USERS } from '../network/Urls'
@@ -156,12 +158,16 @@ export default class Login extends Component {
           barStyle={'light-content'}
         >
         </StatusBar>
-        <ImageBackground
-          style={styles.bg}
-          source={
-            this.state.selectedIndex === 1
-              ? require('../../res/images/bg_sign.png')
-              : require('../../res/images/bg_reg.png')}>
+          <View style={[styles.imageBox, { height: this.state.selectedIndex === 0 ? WIDTH*202.0/376 : WIDTH*240.0/375, }]}>
+            <Image 
+              style={styles.image}
+              source={
+                this.state.selectedIndex === 0 ?
+                require('../../res/images/bg_reg.png') :
+                require('../../res/images/bg_sign.png')}>
+            </Image>
+            <Text style={styles.slogan}>Neuropedia</Text>
+          </View>
           <KeyboardAwareScrollView
             style={styles.scview}
             extraScrollHeight={40}
@@ -170,8 +176,7 @@ export default class Login extends Component {
             contentContainerStyle={{ alignItems: 'center' }}
           >
             <View
-              style={
-                [styles.card, { marginTop: this.state.selectedIndex === 1 ? getResponsiveHeight(180) : getResponsiveHeight(150), }]}>
+              style={styles.card}>
               <SegmentedControl
                 style={styles.segcontrol}
                 defaultPage={1}
@@ -258,7 +263,6 @@ export default class Login extends Component {
               </SegmentedControl>
             </View>
           </KeyboardAwareScrollView>
-        </ImageBackground>
         <TextPingFang style={styles.license}>确认登录代表您已经默认同意相关协议条款</TextPingFang>
       </View>
     )
@@ -272,14 +276,24 @@ const styles = StyleSheet.create({
     height: HEIGHT,
     alignItems: 'center'
   },
-  bg: {
+  imageBox: {
+    width: '100%',
+    height: WIDTH*202.0/376,
     alignItems: 'center',
-    width: WIDTH,
-    height: HEIGHT
+    justifyContent: 'center',
+  },
+  image: {
+    height: '100%',
+    width: '100%',
+  },
+  slogan: {
+    fontSize: setSpText(48),
+    position: 'absolute',
+    color: '#fff', 
   },
   scview: {
     width: '100%',
-    height: '100%'
+    marginTop: -50,
   },
   segcontrol: {
     height: '100%',
@@ -294,7 +308,6 @@ const styles = StyleSheet.create({
   card: {
     width: '100%',
     height: HEIGHT - getResponsiveHeight(180),
-    marginTop: getResponsiveHeight(180),
     alignItems: 'center',
     flexDirection: 'column'
   },
@@ -303,7 +316,7 @@ const styles = StyleSheet.create({
     height: getResponsiveHeight(11),
     lineHeight: getResponsiveHeight(11),
     bottom: getResponsiveHeight(21),
-    fontSize: 8,
+    fontSize: setSpText(8),
     color: '#999',
     fontWeight: '600',
     letterSpacing: 0.65
@@ -321,7 +334,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     flexDirection: 'row',
-    fontSize: 14,
+    fontSize: setSpText(14),
     borderBottomWidth: 1,
     borderStyle: 'solid',
     borderBottomColor: '#d9d9d9',
