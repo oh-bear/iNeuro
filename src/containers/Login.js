@@ -158,111 +158,111 @@ export default class Login extends Component {
           barStyle={'light-content'}
         >
         </StatusBar>
-          <View style={[styles.imageBox, { height: this.state.selectedIndex === 0 ? WIDTH*202.0/376 : WIDTH*240.0/375, }]}>
-            <Image 
-              style={styles.image}
-              source={
-                this.state.selectedIndex === 0 ?
+        <View
+          style={[styles.imageBox, { height: this.state.selectedIndex === 0 ? WIDTH * 202.0 / 376 : WIDTH * 240.0 / 375, }]}>
+          <Image
+            style={styles.image}
+            source={
+              this.state.selectedIndex === 0 ?
                 require('../../res/images/bg_reg.png') :
-                require('../../res/images/bg_sign.png')}>
-            </Image>
-            <Text style={styles.slogan}>Neuropedia</Text>
-          </View>
-          <KeyboardAwareScrollView
-            style={styles.scview}
-            extraScrollHeight={40}
-            scrollEnabled={false}
-            resetScrollToCoords={{ x: 0, y: 0 }}
-            contentContainerStyle={{ alignItems: 'center' }}
-          >
-            <View
-              style={styles.card}>
-              <SegmentedControl
-                style={styles.segcontrol}
-                defaultPage={1}
-                itemButtonViewStyle={styles.itemButtonViewStyle}
-                itemHeaderViewStyle={styles.itemHeaderViewStyle}
-                onItemSelected={this.onItemSelected.bind(this)}
-                ref={e => this.SegmentedControl = e}
+                require('../../res/images/bg_sign.png')}/>
+          <Text style={styles.slogan}>Neuropedia</Text>
+        </View>
+        <KeyboardAwareScrollView
+          style={styles.scview}
+          extraScrollHeight={40}
+          scrollEnabled={false}
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          contentContainerStyle={{ alignItems: 'center' }}
+        >
+          <View
+            style={styles.card}>
+            <SegmentedControl
+              style={styles.segcontrol}
+              defaultPage={1}
+              itemButtonViewStyle={styles.itemButtonViewStyle}
+              itemHeaderViewStyle={styles.itemHeaderViewStyle}
+              onItemSelected={this.onItemSelected.bind(this)}
+              ref={e => this.SegmentedControl = e}
+            >
+              <SegmentedControl.Item
+                title={'SIGN UP'}
               >
-                <SegmentedControl.Item
-                  title={'SIGN UP'}
-                >
-                  <View style={styles.input_container}>
-                    <TextInput
-                      placeholder={'E-Mail'}
-                      placeholderTextColor={'rgba(0,0,0,0.52)'}
-                      style={styles.text_input}
-                      onChangeText={text => {
-                        this.setState({ account: text })
-                      }}
-                      defaultValue={this.state.account}/>
-                    <TextInput
-                      placeholder={'Name'}
-                      placeholderTextColor={'rgba(0,0,0,0.52)'}
-                      style={styles.text_input}
-                      onChangeText={text => {
-                        this.setState({ name: text })
-                      }}/>
-                    <TextInput
-                      placeholder={'Password'}
-                      placeholderTextColor={'rgba(0,0,0,0.52)'}
-                      style={styles.text_input}
-                      onChangeText={text => {
-                        this.setState({ password: text })
-                      }}
-                      password={true}
-                      secureTextEntry/>
-                    <TextInput
-                      placeholder={'Password'}
-                      placeholderTextColor={'rgba(0,0,0,0.52)'}
-                      style={styles.text_input}
-                      onChangeText={text => {
-                        this.setState({ confirmPwd: text })
-                      }}
-                      password={true}
-                      secureTextEntry/>
-                    <Button
-                      type="primary"
-                      style={styles.btn}
-                      onClick={this.onSubmitRegister}>
-                      注册
-                    </Button>
-                  </View>
-                </SegmentedControl.Item>
-                <SegmentedControl.Item
-                  title={'SIGN IN'}
-                >
-                  <View style={styles.input_container}>
-                    <TextInput
-                      placeholder={'E-Mail'}
-                      placeholderTextColor={'rgba(0,0,0,0.52)'}
-                      style={styles.text_input}
-                      onChangeText={text => {
-                        this.setState({ account: text })
-                      }}
-                      defaultValue={this.state.account}/>
-                    <TextInput
-                      placeholder={'Password'}
-                      placeholderTextColor={'rgba(0,0,0,0.52)'}
-                      style={styles.text_input}
-                      onChangeText={text => {
-                        this.setState({ password: text })
-                      }}
-                      defaultValue={this.state.password}
-                      password={true}
-                      secureTextEntry/>
-                    <Button
-                      type="primary"
-                      style={styles.btn}
-                      onClick={this.onSubmit}>
-                      登录
-                    </Button>
-                  </View>
-                </SegmentedControl.Item>
-              </SegmentedControl>
-            </View>
-          </KeyboardAwareScrollView>
+                <View style={styles.input_container}>
+                  <TextInput
+                    placeholder={'E-Mail'}
+                    placeholderTextColor={'rgba(0,0,0,0.52)'}
+                    style={styles.text_input}
+                    onChangeText={text => {
+                      this.setState({ account: text })
+                    }}
+                    defaultValue={this.state.account}/>
+                  <TextInput
+                    placeholder={'Name'}
+                    placeholderTextColor={'rgba(0,0,0,0.52)'}
+                    style={styles.text_input}
+                    onChangeText={text => {
+                      this.setState({ name: text })
+                    }}/>
+                  <TextInput
+                    placeholder={'Password'}
+                    placeholderTextColor={'rgba(0,0,0,0.52)'}
+                    style={styles.text_input}
+                    onChangeText={text => {
+                      this.setState({ password: text })
+                    }}
+                    password={true}
+                    secureTextEntry/>
+                  <TextInput
+                    placeholder={'Password'}
+                    placeholderTextColor={'rgba(0,0,0,0.52)'}
+                    style={styles.text_input}
+                    onChangeText={text => {
+                      this.setState({ confirmPwd: text })
+                    }}
+                    password={true}
+                    secureTextEntry/>
+                  <Button
+                    type="primary"
+                    style={styles.btn}
+                    onClick={this.onSubmitRegister}>
+                    注册
+                  </Button>
+                </View>
+              </SegmentedControl.Item>
+              <SegmentedControl.Item
+                title={'SIGN IN'}
+              >
+                <View style={styles.input_container}>
+                  <TextInput
+                    placeholder={'E-Mail'}
+                    placeholderTextColor={'rgba(0,0,0,0.52)'}
+                    style={styles.text_input}
+                    onChangeText={text => {
+                      this.setState({ account: text })
+                    }}
+                    defaultValue={this.state.account}/>
+                  <TextInput
+                    placeholder={'Password'}
+                    placeholderTextColor={'rgba(0,0,0,0.52)'}
+                    style={styles.text_input}
+                    onChangeText={text => {
+                      this.setState({ password: text })
+                    }}
+                    defaultValue={this.state.password}
+                    password={true}
+                    secureTextEntry/>
+                  <Button
+                    type="primary"
+                    style={styles.btn}
+                    onClick={this.onSubmit}>
+                    登录
+                  </Button>
+                </View>
+              </SegmentedControl.Item>
+            </SegmentedControl>
+          </View>
+        </KeyboardAwareScrollView>
         <TextPingFang style={styles.license}>确认登录代表您已经默认同意相关协议条款</TextPingFang>
       </View>
     )
@@ -278,7 +278,7 @@ const styles = StyleSheet.create({
   },
   imageBox: {
     width: '100%',
-    height: WIDTH*202.0/376,
+    height: WIDTH * 202.0 / 376,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
   slogan: {
     fontSize: setSpText(48),
     position: 'absolute',
-    color: '#fff', 
+    color: '#fff',
   },
   scview: {
     width: '100%',

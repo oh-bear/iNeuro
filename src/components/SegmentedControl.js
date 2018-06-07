@@ -20,24 +20,9 @@ export default class SegmentedControl extends Component {
     itemButtonColor: 'transparent',
     itemTextActiveColor: '#fff',
     itemTextColor: '#737373',
-    itemButtonViewStyle: undefined,
+    itemButtonViewStyle: {},
     itemButtonBorderColor: 'transparent',
-    itemHeaderViewStyle: undefined,
-  }
-
-  static propTypes = {
-    ...View.propTypes,
-    style: View.propTypes.style,
-    defaultPage: PropTypes.number,
-    itemFontSize: PropTypes.number,
-    itemButtonActiveColor: PropTypes.string,
-    itemButtonColor: PropTypes.string,
-    itemTextActiveColor: PropTypes.string,
-    itemTextColor: PropTypes.string,
-    onItemSelected: PropTypes.func,
-    itemButtonViewStyle: View.propTypes.style,
-    itemButtonBorderColor: PropTypes.string,
-    itemHeaderViewStyle: View.propTypes.style,
+    itemHeaderViewStyle: {},
   }
 
   constructor(props) {

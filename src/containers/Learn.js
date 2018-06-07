@@ -130,6 +130,7 @@ export default class Learn extends Component {
     }
   }
 
+  // TODO: 改成判断题
   render() {
 
     switch (this.state.visible) {
