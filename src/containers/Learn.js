@@ -13,6 +13,10 @@ import { Actions } from 'react-native-router-flux'
 import { LEARN } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
 import { connect } from 'react-redux'
+import ProfileHeader from '../components/ProfileHeader'
+import TextPingFang from '../components/TextPingFang'
+import Container from '../components/Container'
+import storage from '../common/storage'
 
 function mapStateToProps(state) {
   return {
@@ -24,110 +28,69 @@ function mapStateToProps(state) {
 export default class Learn extends Component {
 
   state = {
+    datas: [],
     data: { name: '', url: '' },
     options: ['A', 'B', 'C', 'D'],
     height: HEIGHT,
-    visible: 0 // 1 right, 2 wrong
+    visible: 0, // 1 right, 2 wrong
+    index: 0,
+    mounted: false
   }
 
-  componentWillMount() {
-    HttpUtils.get(LEARN.get_learn, {}).then(res => {
-      if (res.code === 0) {
-        Image.getSize(res.data.url, (width, height) => {
-          height = WIDTH * height / width
-          this.setState({
-            data: res.data,
-            options: res.options,
-            height,
-            visible: 0
-          })
-        })
-      }
+
+  async componentWillMount() {
+    const idx_data = await storage.get('index', { data: 0 })
+    let index = idx_data.data
+    const datas = await storage.get('learn_data')
+    console.log(datas)
+    this.setState({
+      datas,
+      index,
+      mounted: true
     })
   }
 
+  async componentWillUnmount() {
+    this.setState({
+      mounted: false
+    })
+    await storage.set('index', { data: this.state.index })
+  }
+
   next = () => {
-    HttpUtils.get(LEARN.get_learn, {}).then(res => {
-      if (res.code === 0) {
-        Image.getSize(res.data.url, (width, height) => {
-          height = WIDTH * height / width
-          this.setState({
-            data: res.data,
-            options: res.options,
-            height,
-            visible: 0
-          })
-        })
-      }
+    let index = this.state.index
+    Image.getSize((this.state.datas[index + 1].url + '-375width.jpg'), (width, height) => {
+      height = WIDTH * height / width
+      this.setState({
+        height,
+        visible: 0,
+        index: index + 1
+      })
     })
   }
 
   submit_A = () => {
-    if (this.state.options[0] === this.state.data.name) {
-      HttpUtils.post(LEARN.right, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 1
-        })
+    HttpUtils.post(LEARN.right, { resource_id: this.state.datas[this.state.index].id }).then(res => {
+      this.setState({
+        visible: 1
       })
-
-    } else {
-      HttpUtils.post(LEARN.wrong, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 2
-        })
-      })
-    }
+    })
   }
 
   submit_B = () => {
-    if (this.state.options[1] === this.state.data.name) {
-      HttpUtils.post(LEARN.right, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 1
-        })
+    HttpUtils.post(LEARN.forget, { resource_id: this.state.datas[this.state.index].id }).then(res => {
+      this.setState({
+        visible: 2
       })
-
-    } else {
-      HttpUtils.post(LEARN.wrong, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 2
-        })
-      })
-    }
+    })
   }
 
   submit_C = () => {
-    if (this.state.options[2] === this.state.data.name) {
-      HttpUtils.post(LEARN.right, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 1
-        })
+    HttpUtils.post(LEARN.wrong, { resource_id: this.state.datas[this.state.index].id }).then(res => {
+      this.setState({
+        visible: 2
       })
-
-    } else {
-      HttpUtils.post(LEARN.wrong, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 2
-        })
-      })
-    }
-  }
-
-  submit_D = () => {
-    if (this.state.options[3] === this.state.data.name) {
-      HttpUtils.post(LEARN.right, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 1
-        })
-      })
-
-    } else {
-      HttpUtils.post(LEARN.wrong, { resource_id: this.state.data.id }).then(res => {
-        this.setState({
-          visible: 2
-        })
-      })
-    }
+    })
   }
 
   // TODO: 改成判断题
@@ -139,22 +102,17 @@ export default class Learn extends Component {
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_A}>
-          <Text>A. {this.state.options[0]}</Text>
+          <Text>I know it.</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_B}>
-          <Text>B. {this.state.options[1]}</Text>
+          <Text>I just remember a little bit.</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_C}>
-          <Text>C. {this.state.options[2]}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.optionsContainer}
-          onPress={this.submit_D}>
-          <Text>D. {this.state.options[3]}</Text>
+          <Text>I forget it.</Text>
         </TouchableOpacity>
       </View>
       break
@@ -162,9 +120,11 @@ export default class Learn extends Component {
       optionsView =
         <TouchableOpacity
           style={styles.result}
-          onPress={this.next}
+          onPress={() => {
+            this.next()
+          }}
         >
-          <Text>{this.state.data.name}</Text>
+          <Text>{this.state.datas[this.state.index].name}</Text>
           <Image
             style={styles.result_logo}
             source={require('../../res/images/learn/right.png')}/>
@@ -174,9 +134,11 @@ export default class Learn extends Component {
       optionsView =
         <TouchableOpacity
           style={styles.result}
-          onPress={this.next}
+          onPress={() => {
+            this.next()
+          }}
         >
-          <Text>{this.state.data.name}</Text>
+          <Text>{this.state.datas[this.state.index].name}</Text>
           <Image
             style={styles.result_logo}
             source={require('../../res/images/learn/wrong.png')}/>
@@ -187,44 +149,43 @@ export default class Learn extends Component {
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_A}>
-          <Text>A. {this.state.options[0]}</Text>
+          <Text>I know it.</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_B}>
-          <Text>B. {this.state.options[1]}</Text>
+          <Text>I just remember a little bit.</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_C}>
-          <Text>C. {this.state.options[2]}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.optionsContainer}
-          onPress={this.submit_D}>
-          <Text>D. {this.state.options[3]}</Text>
+          <Text>I forget it.</Text>
         </TouchableOpacity>
       </View>
     }
 
     return (
-      <View style={styles.container}>
-        <CommonNav
+      <Container>
+        <ProfileHeader
           title='LEARN'
-          rightBtnImg={
-            <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
-          }
-          rightBtnImgOnPress={this.next}/>
+          desc={`学习进度：${this.state.index} / ${this.state.datas.length}`}
+          rightButton={
+            <TouchableOpacity onPress={() => {
+              this.next()
+            }}>
+              <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
+            </TouchableOpacity>
+          }/>
         <ScrollView style={styles.box}>
           <Image
             style={{
               width: WIDTH,
               height: this.state.height
             }}
-            source={{ uri: this.state.data.url }}/>
+            source={{ uri: this.state.mounted ? (this.state.datas[this.state.index].url + '-375width.jpg') : '' }}/>
           {optionsView}
         </ScrollView>
-      </View>
+      </Container>
     )
   }
 }

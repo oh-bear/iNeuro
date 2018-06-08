@@ -12,6 +12,9 @@ import { WIDTH, HEIGHT, getResponsiveWidth, getResponsiveHeight } from '../commo
 import CommonNav from '../components/CommonNav'
 import { SCENE_DETAIL } from '../constants/scene'
 import { Actions } from 'react-native-router-flux'
+import ProfileHeader from '../components/ProfileHeader'
+import TextPingFang from '../components/TextPingFang'
+import Container from '../components/Container'
 
 import { LIBS } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
@@ -35,8 +38,8 @@ export default class Search extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <CommonNav title='SEARCH'/>
+      <Container>
+        <ProfileHeader title='SEARCH'/>
         <View style={styles.box}>
           <View style={styles.content}>
             <TextInput
@@ -76,7 +79,7 @@ export default class Search extends Component {
               </TouchableOpacity>
           }
         />
-      </View>
+      </Container>
     )
   }
 }

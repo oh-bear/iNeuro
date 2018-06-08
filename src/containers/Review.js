@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import {
   View,
   StyleSheet,
@@ -13,6 +13,9 @@ import CommonNav from '../components/CommonNav'
 import { LEARN } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
 import { connect } from 'react-redux'
+import ProfileHeader from '../components/ProfileHeader'
+import TextPingFang from '../components/TextPingFang'
+import Container from '../components/Container'
 
 function mapStateToProps(state) {
   return {
@@ -31,7 +34,7 @@ export default class Review extends Component {
   componentWillMount() {
     HttpUtils.post(LEARN.get_review, {}).then(res => {
       if (res.code === 0) {
-        Image.getSize(res.data.url, (width, height) => {
+        Image.getSize((res.data.url + '-375width.jpg'), (width, height) => {
           height = WIDTH * height / width
           this.setState({
             data: res.data,
@@ -135,23 +138,27 @@ export default class Review extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        <CommonNav
+      <Container>
+        <ProfileHeader
           title='REVIEW'
-          rightBtnImg={
-            <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
+          rightButton={
+            <TouchableOpacity onPress={() => {
+              this.next()
+            }}>
+              <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
+            </TouchableOpacity>
           }
-          rightBtnImgOnPress={this.next}/>
+        />
         <ScrollView style={styles.box}>
           <Image
             style={{
               width: WIDTH,
               height: this.state.height
             }}
-            source={{ uri: this.state.data.url }}/>
+            source={{ uri: (this.state.data.url + '-375width.jpg') }}/>
           {optionsView}
         </ScrollView>
-      </View>
+      </Container>
     )
   }
 }

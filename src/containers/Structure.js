@@ -14,6 +14,9 @@ import { SCENE_DETAIL } from '../constants/scene'
 import { LIBS } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
 import CommonNav from '../components/CommonNav'
+import ProfileHeader from '../components/ProfileHeader'
+import TextPingFang from '../components/TextPingFang'
+import Container from '../components/Container'
 
 export default class Structure extends Component {
 
@@ -37,8 +40,8 @@ export default class Structure extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <CommonNav title='STRUCTURE'/>
+      <Container>
+        <ProfileHeader title='STRUCTURE'/>
         <ListView
           style={styles.list}
           dataSource={this.state.dataSource}
@@ -60,7 +63,7 @@ export default class Structure extends Component {
               </TouchableOpacity>
           }
         />
-      </View>
+      </Container>
     )
   }
 }
@@ -73,7 +76,6 @@ const styles = StyleSheet.create({
     height: HEIGHT
   },
   list: {
-    marginTop: getResponsiveHeight(13)
   },
   box: {
     width: WIDTH,

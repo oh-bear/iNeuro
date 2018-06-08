@@ -1,55 +1,40 @@
 import React, { Component } from 'react'
 import {
-  View,
-  Image,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity,
+  Image
 } from 'react-native'
+import {
+  getResponsiveWidth,
+} from '../common/styles'
 import NavigationBar from './NavigationBar'
 import { Actions } from 'react-native-router-flux'
-import { WIDTH, HEIGHT, getResponsiveHeight, getResponsiveWidth } from '../common/styles'
 
 export default class CommonNav extends Component {
-  constructor(props) {
-    super(props)
-  }
-
-  static defaultProps = {
-    title: '首页',
-    rightButton: <View />
-  }
 
   render() {
     return (
-      <View>
-        <NavigationBar
-          navBarStyle={styles.navBarStyle}
-          navStyle={this.props.navStyle}
-          title={this.props.title}
-          titleStyle={styles.titleStyle}
-          leftBtnImg={
-            <Image style={styles.navLeftImg} source={require('../../res/images/navigation/icon_back_def.png')}/>
-          }
-          leftBtnImgOnPress={this.props.back ? this.props.back : () => Actions.pop()}
-          navLeftStyle={this.props.navLeftStyle}
-          rightBtnImg={this.props.rightBtnImg}
-          rightBtnImgOnPress={this.props.rightBtnImgOnPress}
-          navRightStyle={this.props.navRightStyle}
-        />
-      </View>
+      <NavigationBar
+        navBarStyle={this.props.navBarStyle}
+        navStyle={this.props.navStyle}
+        title={this.props.title}
+        titleStyle={this.props.titleStyle}
+        leftButton={
+          <TouchableOpacity
+            style={styles.left_btn}
+            onPress={this.props.onPressBack ? this.props.onPressBack : () => Actions.pop()}
+          >
+            <Image source={require('../../res/images/common/icon_back_black.png')}/>
+          </TouchableOpacity>
+        }
+        rightButton={this.props.rightButton}
+      />
     )
   }
 }
 
 const styles = StyleSheet.create({
-  navBarStyle: {
-    width: WIDTH,
-  },
-  navLeftImg: {
-    width: 25,
-    height: 25,
-    marginRight: 16
-  },
-  titleStyle: {
-    marginLeft: 72
+  left_btn: {
+    width: getResponsiveWidth(24),
   }
 })

@@ -14,6 +14,7 @@ import * as scenes from '../constants/scene'
 import { Actions } from 'react-native-router-flux'
 import { LEARN } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
+import storage from '../common/storage'
 
 function mapStateToProps(state) {
   return {
