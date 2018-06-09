@@ -26,8 +26,9 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 export default class Review extends Component {
   state = {
-    data: { name: '', url: '' },
+    data: { name: '', url: '', wrong_time: 1, total_time: 1 },
     height: HEIGHT,
+    record: { result: 0 },
     visible: 0 // 1 right, 2 wrong
   }
 
@@ -38,6 +39,7 @@ export default class Review extends Component {
           height = WIDTH * height / width
           this.setState({
             data: res.data,
+            record: res.record,
             height,
             visible: 0
           })
@@ -141,6 +143,7 @@ export default class Review extends Component {
       <Container>
         <ProfileHeader
           title='REVIEW'
+          desc={`该题正确率：${((1 - this.state.data.wrong_time / this.state.data.total_time) * 100)} %，该题记忆指数：${(this.state.record.result)}`}
           rightButton={
             <TouchableOpacity onPress={() => {
               this.next()
