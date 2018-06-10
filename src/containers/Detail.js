@@ -15,7 +15,7 @@ export default class Detail extends Component {
   state = { height: HEIGHT }
 
   componentDidMount() {
-    Image.getSize(this.props.data.url, (width, height) => {
+    Image.getSize((this.props.data.url + '-375width.jpg'), (width, height) => {
       height = WIDTH * height / width
       this.setState({ height })
     })
@@ -31,7 +31,7 @@ export default class Detail extends Component {
               width: WIDTH,
               height: this.state.height
             }}
-            source={{ uri: this.props.data.url }}/>
+            source={{ uri: (this.props.data.url + '-375width.jpg') }}/>
         </View>
         <TextPingFang style={styles.text}>{this.props.data.name}</TextPingFang>
       </View>
