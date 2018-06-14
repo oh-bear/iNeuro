@@ -6,8 +6,11 @@ import {
   Image,
   TouchableOpacity,
   AlertIOS,
-  ScrollView
+  ScrollView,
+  Modal
 } from 'react-native'
+import ImageViewer from 'react-native-image-zoom-viewer'
+
 import { WIDTH, HEIGHT, getResponsiveHeight } from '../common/styles'
 import CommonNav from '../components/CommonNav'
 import { LEARN } from '../network/Urls'
@@ -29,7 +32,9 @@ export default class Review extends Component {
     data: { name: '', url: '', wrong_time: 1, total_time: 1 },
     height: HEIGHT,
     record: { result: 0 },
-    visible: 0 // 1 right, 2 wrong
+    length: 0,
+    visible: 0, // 1 right, 2 wrong
+    modalVisible: false,
   }
 
   componentWillMount() {
@@ -40,6 +45,7 @@ export default class Review extends Component {
           this.setState({
             data: res.data,
             record: res.record,
+            length: res.length,
             height,
             visible: 0
           })
@@ -87,7 +93,7 @@ export default class Review extends Component {
 
     switch (this.state.visible) {
     case 0 :
-      optionsView = <View>
+      optionsView = <View style={styles.choose}>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_A}>
@@ -125,7 +131,7 @@ export default class Review extends Component {
         </TouchableOpacity>
       break
     default:
-      optionsView = <View>
+      optionsView = <View style={styles.choose}>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_A}>
@@ -141,24 +147,36 @@ export default class Review extends Component {
 
     return (
       <Container>
-        <ProfileHeader
-          title='REVIEW'
-          desc={`该题正确率：${((1 - this.state.data.wrong_time / this.state.data.total_time) * 100)} %，该题记忆指数：${(this.state.record.result)}`}
-          rightButton={
-            <TouchableOpacity onPress={() => {
-              this.next()
-            }}>
-              <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
-            </TouchableOpacity>
-          }
-        />
         <ScrollView style={styles.box}>
-          <Image
-            style={{
-              width: WIDTH,
-              height: this.state.height
-            }}
-            source={{ uri: (this.state.data.url + '-375width.jpg') }}/>
+          <ProfileHeader
+            title='REVIEW'
+            desc={`Correct rate：${((1 - this.state.data.wrong_time / this.state.data.total_time) * 100)} %, Score：${(this.state.record.result)}, Left: ${this.state.length}`}
+            rightButton={
+              <TouchableOpacity onPress={() => {
+                this.next()
+              }}>
+                <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
+              </TouchableOpacity>
+            }
+          />
+          <Modal visible={this.state.modalVisible} transparent={true}>
+            <ImageViewer
+              imageUrls={[{ url: this.state.data.url }]}
+              enableImageZoom={true}
+              onClick={() => {
+                this.setState({ modalVisible: false })
+              }}/>
+          </Modal>
+          <TouchableOpacity onPress={() => {
+            this.setState({ modalVisible: true })
+          }}>
+            <Image
+              style={{
+                width: WIDTH,
+                height: this.state.height
+              }}
+              source={{ uri: (this.state.data.url + '-375width.jpg') }}/>
+          </TouchableOpacity>
           {optionsView}
         </ScrollView>
       </Container>
@@ -187,6 +205,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#979797'
+  },
+  choose: {
+    marginTop: 50
   },
   result: {
     flexDirection: 'column',

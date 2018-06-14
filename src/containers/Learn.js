@@ -5,8 +5,12 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  ScrollView
+  ScrollView,
+  Modal
 } from 'react-native'
+
+import ImageViewer from 'react-native-image-zoom-viewer'
+
 import { WIDTH, HEIGHT, getResponsiveHeight } from '../common/styles'
 import CommonNav from '../components/CommonNav'
 import { Actions } from 'react-native-router-flux'
@@ -34,19 +38,25 @@ export default class Learn extends Component {
     height: HEIGHT,
     visible: 0, // 1 right, 2 wrong
     index: 0,
-    mounted: false
+    mounted: false,
+    modalVisible: false,
+    images: []
   }
-
 
   async componentWillMount() {
     const idx_data = await storage.get('index', { data: 0 })
     let index = idx_data.data
     const datas = await storage.get('learn_data')
-    console.log(datas)
     this.setState({
       datas,
       index,
-      mounted: true
+      mounted: true,
+      images: [
+        {
+          url: datas[index].url + '-375width.jpg',
+          freeHeight: true
+        }
+      ]
     })
   }
 
@@ -93,12 +103,11 @@ export default class Learn extends Component {
     })
   }
 
-  // TODO: 改成判断题
   render() {
 
     switch (this.state.visible) {
     case 0 :
-      optionsView = <View>
+      optionsView = <View style={styles.choose}>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_A}>
@@ -145,7 +154,7 @@ export default class Learn extends Component {
         </TouchableOpacity>
       break
     default:
-      optionsView = <View>
+      optionsView = <View style={styles.choose}>
         <TouchableOpacity
           style={styles.optionsContainer}
           onPress={this.submit_A}>
@@ -166,23 +175,35 @@ export default class Learn extends Component {
 
     return (
       <Container>
-        <ProfileHeader
-          title='LEARN'
-          desc={`学习进度：${this.state.index} / ${this.state.datas.length}`}
-          rightButton={
-            <TouchableOpacity onPress={() => {
-              this.next()
-            }}>
-              <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
-            </TouchableOpacity>
-          }/>
         <ScrollView style={styles.box}>
-          <Image
-            style={{
-              width: WIDTH,
-              height: this.state.height
-            }}
-            source={{ uri: this.state.mounted ? (this.state.datas[this.state.index].url + '-375width.jpg') : '' }}/>
+          <ProfileHeader
+            title='LEARN'
+            desc={`Learning progress：${this.state.index} / ${this.state.datas.length}`}
+            rightButton={
+              <TouchableOpacity onPress={() => {
+                this.next()
+              }}>
+                <Image style={styles.navLeftImg} source={require('../../res/images/navigation/next.png')}/>
+              </TouchableOpacity>
+            }/>
+          <Modal visible={this.state.modalVisible} transparent={true}>
+            <ImageViewer
+              imageUrls={[{ url: this.state.mounted ? this.state.datas[this.state.index].url : ''}]}
+              enableImageZoom={true}
+              onClick={() => {
+                this.setState({ modalVisible: false })
+              }}/>
+          </Modal>
+          <TouchableOpacity onPress={() => {
+            this.setState({ modalVisible: true })
+          }}>
+            <Image
+              style={{
+                width: WIDTH,
+                height: this.state.height
+              }}
+              source={{ uri: this.state.mounted ? (this.state.datas[this.state.index].url + '-375width.jpg') : '' }}/>
+          </TouchableOpacity>
           {optionsView}
         </ScrollView>
       </Container>
@@ -211,6 +232,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 0.5,
     borderColor: '#979797'
+  },
+  choose: {
+    marginTop: 50
   },
   result: {
     flexDirection: 'column',
