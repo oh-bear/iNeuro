@@ -334,7 +334,7 @@ const styles = StyleSheet.create({
     paddingTop: 0,
     paddingBottom: 0,
     flexDirection: 'row',
-    fontSize: setSpText(14),
+    fontSize: setSpText(32),
     borderBottomWidth: 1,
     borderStyle: 'solid',
     borderBottomColor: '#d9d9d9',

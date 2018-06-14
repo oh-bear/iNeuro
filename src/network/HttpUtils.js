@@ -13,8 +13,8 @@ export function setToken(data) {
   }
 }
 
-let baseUrl = 'http://localhost:7002'
-// let baseUrl = 'https://neuropedia.cn'
+// let baseUrl = 'http://localhost:7001'
+let baseUrl = 'https://neuropedia.cn'
 
 axios.defaults.timeout = 20000
 

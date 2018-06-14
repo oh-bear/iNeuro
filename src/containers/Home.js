@@ -6,7 +6,8 @@ import {
   ImageBackground,
   Image,
   TouchableOpacity,
-  AlertIOS
+  AlertIOS,
+  AsyncStorage
 } from 'react-native'
 import { HEIGHT, WIDTH, getResponsiveWidth, getResponsiveHeight } from '../common/styles'
 import { connect } from 'react-redux'
@@ -14,7 +15,6 @@ import * as scenes from '../constants/scene'
 import { Actions } from 'react-native-router-flux'
 import { LEARN } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
-import storage from '../common/storage'
 
 function mapStateToProps(state) {
   return {
@@ -25,6 +25,13 @@ function mapStateToProps(state) {
 @connect(mapStateToProps)
 export default class Home extends Component {
 
+  async componentWillMount() {
+    let result = await AsyncStorage.getItem('system')
+    if (!result) {
+      await AsyncStorage.setItem('system', `{ data: 'Skull,' }`)
+    }
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -32,7 +39,7 @@ export default class Home extends Component {
           <TouchableOpacity
             style={styles.face}
             onPress={() => {
-              // Actions.jump(scenes.SCENE_PROFILE)
+              Actions.jump(scenes.SCENE_PROFILE, { user: this.props.user })
             }}>
             <Image
               style={styles.face_img}

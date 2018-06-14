@@ -1,6 +1,8 @@
 export const USERS = {
   login: '/users/login',
-  register: '/users/register'
+  register: '/users/register',
+  qiniu_token: '/users/qiniu_token',
+  update: '/users/update'
 }
 
 export const LIBS = {
