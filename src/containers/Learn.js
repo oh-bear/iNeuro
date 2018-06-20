@@ -6,15 +6,18 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Modal
+  Modal,
+  AlertIOS,
+  ListView
 } from 'react-native'
 
 import ImageViewer from 'react-native-image-zoom-viewer'
 
-import { WIDTH, HEIGHT, getResponsiveHeight } from '../common/styles'
+import { WIDTH, HEIGHT, getResponsiveHeight, getResponsiveWidth } from '../common/styles'
 import CommonNav from '../components/CommonNav'
+import { SCENE_DETAIL } from '../constants/scene'
 import { Actions } from 'react-native-router-flux'
-import { LEARN } from '../network/Urls'
+import { LEARN, LIBS } from '../network/Urls'
 import HttpUtils from '../network/HttpUtils'
 import { connect } from 'react-redux'
 import ProfileHeader from '../components/ProfileHeader'
@@ -40,7 +43,11 @@ export default class Learn extends Component {
     index: 0,
     mounted: false,
     modalVisible: false,
-    images: []
+    images: [],
+    content: '',
+    dataSource: new ListView.DataSource({
+      rowHasChanged: (r1, r2) => r1 !== r2
+    })
   }
 
   async componentWillMount() {
@@ -69,14 +76,20 @@ export default class Learn extends Component {
 
   next = () => {
     let index = this.state.index
-    Image.getSize((this.state.datas[index + 1].url + '-375width.jpg'), (width, height) => {
-      height = WIDTH * height / width
-      this.setState({
-        height,
-        visible: 0,
-        index: index + 1
+
+    if (index >= this.state.datas.length - 1) {
+      AlertIOS.alert('Good', 'You have no thing to learn!')
+    } else {
+      Image.getSize((this.state.datas[index + 1].url + '-375width.jpg'), (width, height) => {
+        height = WIDTH * height / width
+        this.setState({
+          height,
+          visible: 0,
+          index: index + 1,
+          dataSource: this.state.dataSource.cloneWithRows({})
+        })
       })
-    })
+    }
   }
 
   submit_A = () => {
@@ -122,6 +135,17 @@ export default class Learn extends Component {
           style={styles.optionsContainer}
           onPress={this.submit_C}>
           <Text>I forget it.</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.optionsContainer}
+          onPress={() => {
+            HttpUtils.post(LIBS.search, { content: this.state.datas[this.state.index].name }).then(res => {
+              this.setState({
+                dataSource: this.state.dataSource.cloneWithRows(res.data)
+              })
+            })
+          }}>
+          <Text>See also.</Text>
         </TouchableOpacity>
       </View>
       break
@@ -205,6 +229,25 @@ export default class Learn extends Component {
               source={{ uri: this.state.mounted ? (this.state.datas[this.state.index].url + '-375width.jpg') : '' }}/>
           </TouchableOpacity>
           {optionsView}
+          <ListView
+            style={styles.list}
+            dataSource={this.state.dataSource}
+            renderRow={
+              (rowData) =>
+                <TouchableOpacity
+                  style={styles.list}
+                  onPress={() => {
+                    Actions.jump(SCENE_DETAIL, { data: rowData })
+                  }}
+                >
+                  <View style={styles.content}>
+                    <Text style={styles.text_name}>{rowData.name}</Text>
+                    <Text style={styles.system_text}>{rowData.system_name}</Text>
+                  </View>
+                  <View style={styles.line}/>
+                </TouchableOpacity>
+            }
+          />
         </ScrollView>
       </Container>
     )
@@ -243,5 +286,39 @@ const styles = StyleSheet.create({
   },
   result_logo: {
     marginTop: 10
+  },
+  list: {
+    width: WIDTH,
+    height: getResponsiveHeight(50)
+  },
+  content: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: WIDTH,
+    height: getResponsiveHeight(50)
+  },
+  line: {
+    width: WIDTH,
+    marginLeft: getResponsiveWidth(50),
+    height: 1,
+    borderBottomColor: '#979797',
+    borderBottomWidth: 1
+  },
+  text_name: {
+    width: 0.6 * WIDTH,
+    color: '#444',
+    marginTop: getResponsiveHeight(15),
+    marginLeft: getResponsiveWidth(63),
+    fontSize: 16
+  },
+  system_text: {
+    color: '#777',
+    marginTop: getResponsiveHeight(15),
+  },
+  icon: {
+    marginTop: getResponsiveHeight(16),
+    marginRight: getResponsiveHeight(18),
+    width: 20,
+    height: 20,
   }
 })
