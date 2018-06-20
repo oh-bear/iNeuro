@@ -47,7 +47,6 @@ export default class Library extends Component {
     })
   }
 
-  // TODO: 添加保存功能（保存时请求数据，获取数据之后本地缓存）
   render() {
 
     let img = <Image source={require('../../res/images/icon/icon_search.png')}/>
@@ -57,7 +56,7 @@ export default class Library extends Component {
       <Container>
         <ProfileHeader
           title='LIBRARY'
-          desc='红色代表已选中的学习模块'
+          desc='Red means what you want to learn.'
           rightButton={
             <TouchableOpacity onPress={async () => {
               let data = {
