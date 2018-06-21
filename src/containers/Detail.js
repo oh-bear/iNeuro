@@ -48,8 +48,8 @@ export default class Detail extends Component {
               height: this.state.height
             }}
             source={{ uri: (this.props.data.url + '-375width.jpg') }}/>
+          <TextPingFang style={styles.text}>{this.props.data.name}</TextPingFang>
         </TouchableOpacity>
-        <TextPingFang style={styles.text}>{this.props.data.name}</TextPingFang>
       </Container>
     )
   }
@@ -64,10 +64,11 @@ const styles = StyleSheet.create({
   },
   box: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
+    marginTop: 40,
+    alignItems: 'center'
   },
   text: {
+    marginTop: 30,
     fontSize: 18
   }
 })
