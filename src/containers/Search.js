@@ -68,7 +68,7 @@ export default class Search extends Component {
               <TouchableOpacity
                 style={styles.box}
                 onPress={() => {
-                  Actions.jump(SCENE_DETAIL, { data: rowData })
+                  Actions.jump(SCENE_DETAIL, { data: rowData, next: false })
                 }}
               >
                 <View style={styles.content}>

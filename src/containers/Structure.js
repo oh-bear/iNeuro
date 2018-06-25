@@ -5,7 +5,8 @@ import {
   Text,
   ListView,
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  AsyncStorage
 } from 'react-native'
 import { HEIGHT, WIDTH, getResponsiveWidth, getResponsiveHeight } from '../common/styles'
 import { Actions } from 'react-native-router-flux'
@@ -17,6 +18,7 @@ import CommonNav from '../components/CommonNav'
 import ProfileHeader from '../components/ProfileHeader'
 import TextPingFang from '../components/TextPingFang'
 import Container from '../components/Container'
+import storage from '../common/storage'
 
 export default class Structure extends Component {
 
@@ -27,15 +29,14 @@ export default class Structure extends Component {
     loaded: false
   }
 
-  componentDidMount() {
-    HttpUtils.get(LIBS.list, { system_name: this.props.system_name }).then(
-      res => {
-        this.setState({
-          dataSource: this.state.dataSource.cloneWithRows(res.data),
-          loaded: true
-        })
-      }
-    )
+  async componentDidMount() {
+    const res = await HttpUtils.get(LIBS.list, { system_name: this.props.system_name })
+    await storage.set('structures', { data: res.data })
+    this.setState({
+      structures: res.data,
+      dataSource: this.state.dataSource.cloneWithRows(res.data),
+      loaded: true
+    })
   }
 
   render() {
@@ -49,9 +50,14 @@ export default class Structure extends Component {
             (rowData) =>
               <TouchableOpacity
                 style={styles.box}
-                onPress={() => {
-                  Actions.jump(SCENE_DETAIL, {data: rowData})
-                }}
+                onPress={
+                  async () => {
+                    await storage.set('structures_index', { data: this.state.structures.indexOf(rowData) })
+                    Actions.jump(SCENE_DETAIL, {
+                      data: rowData,
+                      next: true
+                    })
+                  }}
               >
                 <View style={styles.content}>
                   <Text style={styles.text}>{rowData.name}</Text>
@@ -75,8 +81,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: HEIGHT
   },
-  list: {
-  },
+  list: {},
   box: {
     width: WIDTH,
     height: getResponsiveHeight(50)
