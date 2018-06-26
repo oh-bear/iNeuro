@@ -122,7 +122,7 @@ export default class Profile extends Component {
             <TouchableOpacity
               style={styles.row}
               onPress={() => {
-                // this.seleceFace()
+                this.seleceFace()
               }}
             >
               <TextPingFang style={styles.text_row_left}>Face</TextPingFang>
